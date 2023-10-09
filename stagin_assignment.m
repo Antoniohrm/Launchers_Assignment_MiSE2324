@@ -3,7 +3,7 @@ clear all; close all; clc
 % Constants, todas estas constantes estaria bien tan solo cargarlas
 load('Variables.mat')
 g0 = 9.81;
-mu = 398600000; % m3/s2
+mu = 398600000000000; % m3/s2
 Re = 6371000; %m
 wEarth = 7.2921159e-5;
 
@@ -17,19 +17,21 @@ kourou_lat = 5.2*pi/180; %degrees north, in rad
 % Calculation of Mission Delta V
 
 %orbit_deltaV = sqrt(mu/(Re+h))
-o_deltaV = sqrt(mu/(Re+h));
+v_orbit = sqrt(mu/(Re+h));
 
 % mission_deltaV = orbit_deltaV+LossesAndGains_deltaV+Gain due to Earths rotation DeltaV
 % V_er = Earth's angular velocity (rad/s)
 r0 = [Re*cos(kourou_lat) 0 Re*sin(kourou_lat)]; %m
-V_er = wEarth*r_0*cos()
-g_deltaV = v_orbit-sqrt((v_orbit*sin(A)-V_er)^2 + ()^2)
-
-m_deltaV = o_deltaV + lg_deltaV + g_deltaV;
+V_er = wEarth*r_0*cos(kourou_lat);
+V_gain = v_orbit-sqrt((v_orbit*sin(A)-V_er)^2 + (v_orbit*cos(A))^2);
+v_lg = 1.6; %Aprox for LEO
+m_deltaV = v_orbit + v_lg+ V_gain;
 % Rocket parameters
 
 e1 = 0.1;
-e2 = 0.13;
+e2 = 0.12;
+e3 = 0.14;
+e = [e1, e2, e3];
 
 % Numerical Solution Scheme
 Isp1 = 400;
