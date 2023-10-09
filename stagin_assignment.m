@@ -1,75 +1,65 @@
 %clear all; close all; clc
+rocket = Rocket;
+mission = Mission;
 
-% Constants, todas estas constantes estaria bien tan solo cargarlas
-load('Variables.mat')
-g0 = 9.81;
-mu = 398600000000000; % m3/s2
-Re = 6371000; %m
-wEarth = 7.2921159e-5;
+re = mission.re;
+wEarth = mission.wEarth;
 
-% Problem Data
-M_PL = 300; % Kg
-h = 700000; %m
-deltaV = ; % m/s ?? Delta V for 700km??
+deltav = 0; % m/s ?? Delta V for 700km??
 % Kourou launch base in ECI. Inertial equatorial RF
-kourou_lat = 5.2*pi/180; %degrees north, in rad
+latlaunch = mission.latlaunch*pi/180; %degrees north, in rad
 
 % Calculation of Mission Delta V
 
-%orbit_deltaV = sqrt(mu/(Re+h))
-v_orbit = sqrt(mu/(Re+h));
+%orbit_Vel = sqrt(mu/(Re+h))
+v_orbit = mission.orbitv;
 
-% mission_deltaV = orbit_deltaV+LossesAndGains_deltaV+Gain due to Earths rotation DeltaV
-% V_er = Earth's angular velocity (rad/s)
-r0 = [Re*cos(kourou_lat) 0 Re*sin(kourou_lat)]; %m
-V_er = wEarth*r_0*cos(kourou_lat);
-V_gain = v_orbit-sqrt((v_orbit*sin(A)-V_er)^2 + (v_orbit*cos(A))^2);
-v_lg = 1.6; %Aprox for LEO
-m_deltaV = v_orbit + v_lg+ V_gain;
+% mission_deltaV = orbit_Vel+LossesAndGains_Vel+GainduetoEarths rotation Vel
+% v_er = Earth's angular velocity (rad/s)
+r0 = [re*cos(latlaunch) 0 re*sin(latlaunch)]; %m
+% v_er = wEarth*r0*cos(kourou_lat);
+%A = asin(cos(incl))...
+% v_gain = v_orbit-sqrt((v_orbit*sin(A)-V_er)^2 + (v_orbit*cos(A))^2);
+% v_lg = 1.6; %Aprox for LEO
+deltav = v_orbit + 2; % Rule of thumb
+
 % Rocket parameters
-
-e1 = 0.1;
-e2 = 0.12;
-e3 = 0.14;
-e = [e1, e2, e3];
+strcoeff = rocket.strcoeff;
 
 % Numerical Solution Scheme
-Isp1 = 400;
-Isp2 = 430;
-c1 = Isp1*g0;
-c2 = Isp2*g0;
+exhaust = rocket.isp*mission.g;
 
+rocket.isp
 % For initial guess of p
-c_media=(c1+c2)/2;
-e_media=(e1+e2)/2;
+exhaust_media=(exhaust(1)+exhaust(2)+exhaust(3))/3;
+strcoeff_media=(strcoeff(1)+strcoeff(2)+strcoeff(3))/3;
 
 syms p
-equ=3*c_media*log((1+p*c_media)/(p*c_media*e_media))==deltaV;
-p_bien = solve(equ); %-3.294612e-4
+equ = 3*exhaust_media*log((1+p*exhaust_media)/(p*exhaust_media*strcoeff_media)) == deltaV;
+p_guess = solve(equ); %-3.294612e-4
 
-%Funcion 1 -2.832e-4
+%Funcion 1
 fun = @f;
-p = fzero(fun, double(p_bien),[],c1,c2,e1,e2,deltaV);
+p = fzero(fun, double(p_guess),[],exhaust(1),exhaust(2),exhaust(3),strcoeff(1),strcoeff(2),strcoeff(3),deltav);
 
 %Mass ratio for each stage (2 < Λ < 10)
-Mass_ratio1 = (1+p*c1)/(p*c1*e1);
-Mass_ratio2 = (1+p*c2)/(p*c2*e2);
+mass_rat = (1+p*exhaust)./(p*exhaust.*strcoeff);
 
 %PL ratio for each stage (0.01 < 𝜆 < 0.2)
-PL_ratio1 = (1-Mass_ratio1*e1)/((1-e1)*Mass_ratio1);
-PL_ratio2 = (1-Mass_ratio2*e2)/((1-e2)*Mass_ratio2);
+pl_rat = (1-mass_rat.*strcoeff)./((1-strcoeff).*mass_rat);
 
 %Total PL ratio
-total_PL_ratio = PL_ratio1*PL_ratio2;
+tot_pl_rat = pl_rat(1)*pl_rat(2)*pl_rat(3);
 
 %GMLO
-M_0 = M_PL/total_PL_ratio
+M_0 = mission.mpl/tot_pl_rat
 
 % PL_ratio = M_PL / M_0;                  % Payload Ratio
 % Str_Eff = M_str / (M_str + M_PL);       % Structural efficiency
 syms M_str
 equ = e1 == M_str1 / (M_str1 + M_PL); %OJOO AQUI
-solve(equ,)
+% solve(equ,)
+
 % e1 = 0.1;
 % e2 = 0.13;
 % Prop_ratio = M_prop / M_0;              % Propellant Ratio

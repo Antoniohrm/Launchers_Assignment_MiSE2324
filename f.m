@@ -1,3 +1,5 @@
-function y = f(p_bien,c1,c2,Str_Eff1,Str_Eff2,deltaV)
-y = (c1*log((1+p_bien*c1)/(p_bien*c1*Str_Eff1)))+(c2*log((1+p_bien*c2)/(p_bien*c2*Str_Eff2))) - deltaV;
+function y = f(p_guess,exhaust(1),exhaust(2),exhaust(3),strcoeff(1),strcoeff(2),strcoeff(3),deltav)
+y = (exhaust(1)*log((1+p_guess*exhaust(1))/(p_guess*exhaust(1)*strcoeff(1)))) + ...
+    (exhaust(2)*log((1+p_guess*exhaust(2))/(p_guess*exhaust(2)*strcoeff(2)))) + ...
+    (exhaust(3)*log((1+p_guess*exhaust(3))/(p_guess*exhaust(3)*strcoeff(3)))) - deltav;
 end
