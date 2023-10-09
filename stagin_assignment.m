@@ -1,4 +1,4 @@
-clear all; close all; clc
+%clear all; close all; clc
 
 % Constants, todas estas constantes estaria bien tan solo cargarlas
 load('Variables.mat')
