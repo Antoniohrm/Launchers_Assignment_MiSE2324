@@ -1,11 +1,26 @@
 clear all; close all; clc
 
 % Constants
+load('Variables.mat')
 g0 = 9.81;
-deltaV = 9700; % m/s
-M_PL = 1500; % Kg
+mu = 398600000; % m3/s2
+Re = 6371000; %m
+% Problem Data
+M_PL = 300; % Kg
+h = 700000; %m
+deltaV = 9700; % m/s ?? Delta V for 700km??
 
+% Calculation of Mission Delta V
+
+%orbit_deltaV = sqrt(mu/(Re+h))
+o_deltaV = sqrt(mu/(Re+h));
+
+
+
+% mission_deltaV = orbit_deltaV+LossesAndGains_deltaV+Gain due to Earths rotation DeltaV
+m_deltaV = o_deltaV + lg_deltaV + g_deltaV;
 % Rocket parameters
+
 e1 = 0.1;
 e2 = 0.13;
 
@@ -15,16 +30,13 @@ Isp2 = 430;
 c1 = Isp1*g0;
 c2 = Isp2*g0;
 
-%Function 2
+% For initial guess of p
 c_media=(c1+c2)/2;
 e_media=(e1+e2)/2;
-% fun = @lagrange_initial_guess;
-% p_mal = fzero(fun, -3.294612e-4,[],c_media,e_media,deltaV);
 
 syms p
 equ=3*c_media*log((1+p*c_media)/(p*c_media*e_media))==deltaV;
 p_bien = solve(equ); %-3.294612e-4
-
 
 %Funcion 1 -2.832e-4
 fun = @f;
@@ -43,4 +55,15 @@ total_PL_ratio = PL_ratio1*PL_ratio2;
 
 %GMLO
 M_0 = M_PL/total_PL_ratio
-save Variables.mat g0
+
+% PL_ratio = M_PL / M_0;                  % Payload Ratio
+% Str_Eff = M_str / (M_str + M_PL);       % Structural efficiency
+syms M_str
+equ = e1 == M_str1 / (M_str1 + M_PL); %OJOO AQUI
+solve(equ,)
+% e1 = 0.1;
+% e2 = 0.13;
+% Prop_ratio = M_prop / M_0;              % Propellant Ratio
+% Mass_ratio = M_0 / (M_PL + M_str);      % Mass Ratio = Initial mass/Empty mass
+
+save Variables.mat g0 M_0
