@@ -13,7 +13,8 @@ classdef Mission
         horbit = 700e3          % m
         mpl = 300               % kg
         maxg = [6, 6, 4]        % g's
-        deltav = 0           % m/s (To be calculated)
+        deltav = 0              % m/s (To be calculated)
+        maxq = 45000            % Pa
 
     end
 
