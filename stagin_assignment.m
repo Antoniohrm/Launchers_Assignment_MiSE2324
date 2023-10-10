@@ -4,8 +4,9 @@ mission = Mission;
 
 re = mission.re;
 wEarth = mission.wEarth;
+g = mission.g
 
-deltav = 0; % m/s ?? Delta V for 700km??
+% Delta V for 700km??
 % Kourou launch base in ECI. Inertial equatorial RF
 latlaunch = mission.latlaunch*pi/180; %degrees north, in rad
 
@@ -33,6 +34,7 @@ exhaust = rocket.isp*mission.g;
 exhaust_media=(exhaust(1)+exhaust(2)+exhaust(3))/3;
 strcoeff_media=(strcoeff(1)+strcoeff(2)+strcoeff(3))/3;
 
+%Lagrange initial guess
 syms p
 equ = 3*exhaust_media*log((1+p*exhaust_media)/(p*exhaust_media*strcoeff_media)) == deltav;
 p_guess = solve(equ); %-4.3851e-04
@@ -86,4 +88,25 @@ mp3 = double(solve(equ,mp3));
 syms ms3
 equ = strcoeff(3)==ms3/(ms3+mp3);
 ms3 = double(solve(equ,ms3));
+
+% Thrust and mass flow rate according to launcher architecture
+
+T1 = (m0-mp1)*6*g;           % N
+mdot1 = T1/exhaust(1);       % kg/s
+
+T2 = (m02-mp2)*6*g;          % N
+mdot2 = T2/exhaust(2);       % kg/s
+
+T3 = (m03-mp3)*4*g;          % N
+mdot3 = T3/exhaust(3);       % kg/s
+
+
+% Duration of each stage
+td1= mp1/mdot1; % pff, muchos segundos
+td2= mp2/mdot2;
+td3= mp3/mdot3;
+
+a=2;
+
+
 

@@ -1,7 +1,10 @@
 function [deriv] = endoFlightDeriv(inputArg1,inputArg2)
-%ENDI¡OFLIGHTDERIV Summary of this function goes here
-%   Detailed explanation goes here
-outputArg1 = inputArg1;
-outputArg2 = inputArg2;
+
+
+% I need mdot trhust 
+
+
+rdot = v;
+vdot = (T/m)*ba - (mu/norm(r)^3)*ba - (D/m)*ba
 end
 
