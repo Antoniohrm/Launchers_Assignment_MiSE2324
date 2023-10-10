@@ -29,7 +29,6 @@ strcoeff = rocket.strcoeff;
 % Numerical Solution Scheme
 exhaust = rocket.isp*mission.g;
 
-rocket.isp
 % For initial guess of p
 exhaust_media=(exhaust(1)+exhaust(2)+exhaust(3))/3;
 strcoeff_media=(strcoeff(1)+strcoeff(2)+strcoeff(3))/3;
@@ -38,15 +37,9 @@ syms p
 equ = 3*exhaust_media*log((1+p*exhaust_media)/(p*exhaust_media*strcoeff_media)) == deltav;
 p_guess = solve(equ); %-4.3851e-04
 
-%Funcion 1 dios mio si no hago esto no va D;
-exhaust1=exhaust(1);
-exhaust2=exhaust(2);
-exhaust3=exhaust(3);
-strcoeff1=strcoeff(1);
-strcoeff2=strcoeff(2);
-strcoeff3=strcoeff(3);
+%Funcion 1
 fun = @f;
-p = fzero(fun, double(p_guess),[],exhaust1,exhaust2,exhaust3,strcoeff1,strcoeff2,strcoeff3,deltav);
+p = fzero(fun, double(p_guess),[],exhaust,strcoeff,deltav);
 
 %Mass ratio for each stage (2 < Λ < 10)
 mass_rat = (1+p*exhaust)./(p*exhaust.*strcoeff);

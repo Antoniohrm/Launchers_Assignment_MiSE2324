@@ -38,6 +38,9 @@ syms p
 equ = 3*exhaust_media*log((1+p*exhaust_media)/(p*exhaust_media*strcoeff_media)) == deltav;
 p_guess = solve(equ); %-4.3851e-04
 
+fun = @f;
+p = fzero(fun, double(p_guess),[],exhaust,strcoeff,deltav);
+
 %Funcion 1 dios mio si no hago esto no va D;
 exhaust1=exhaust(1);
 exhaust2=exhaust(2);
@@ -46,7 +49,7 @@ strcoeff1=strcoeff(1);
 strcoeff2=strcoeff(2);
 strcoeff3=strcoeff(3);
 fun = @f;
-p = fzero(fun, double(p_guess),[],exhaust1,exhaust2,exhaust3,strcoeff1,strcoeff2,strcoeff3,deltav);
+p = fzero(fun, double(p_guess),[],exhaust1,exhaust2,exhaust3,strcoeff1,strcoeff2,strcoeff3,deltav); %-4.7911e-04
 
 %Mass ratio for each stage (2 < Λ < 10)
 mass_rat = (1+p*exhaust)./(p*exhaust.*strcoeff);
@@ -90,23 +93,7 @@ syms mp3
 equ = mass_rat(3)==m03/(m03-mp3);
 mp3 = double(solve(equ,mp3));
 
+syms ms3
+equ = strcoeff(3)==ms3/(ms3+mp3);
+ms3 = double(solve(equ,ms3));
 
-
-syms mp3
-equ = mass_rat(3)==m03/(m03-mp3);
-mp3 = double(solve(equ,mp3));
-
-
-
-% PL_ratio = M_PL / M_0;                  % Payload Ratio
-% Str_Eff = M_str / (M_str + M_PL);       % Structural efficiency
-syms M_str
-equ = e1 == M_str1 / (M_str1 + M_PL); %OJOO AQUI
-% solve(equ,)
-
-% e1 = 0.1;
-% e2 = 0.13;
-% Prop_ratio = M_prop / M_0;              % Propellant Ratio
-% Mass_ratio = M_0 / (M_PL + M_str);      % Mass Ratio = Initial mass/Empty mass
-
-save Variables.mat g0 M_0
