@@ -26,6 +26,9 @@ classdef Rocket
                   6,    0.22;
                   6.5,  0.21
                 ]
+
+        % Rocket parameters
+        m0 = 0;
     end
 
     methods

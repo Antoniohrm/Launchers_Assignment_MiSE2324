@@ -17,6 +17,7 @@ classdef Mission
         deltav = 0              % m/s (To be calculated)
         maxq = 45000            % Pa
 
+
     end
 
     methods

@@ -21,7 +21,7 @@ r0 = [re*cos(latlaunch) 0 re*sin(latlaunch)]; %m
 %A = asin(cos(incl))...
 % v_gain = v_orbit-sqrt((v_orbit*sin(A)-V_er)^2 + (v_orbit*cos(A))^2);
 % v_lg = 1.6; %Aprox for LEO
-deltav = v_orbit + 2; % Rule of thumb
+deltav = v_orbit + 2000; % Rule of thumb
 
 % Rocket parameters
 strcoeff = rocket.strcoeff;
@@ -35,28 +35,68 @@ exhaust_media=(exhaust(1)+exhaust(2)+exhaust(3))/3;
 strcoeff_media=(strcoeff(1)+strcoeff(2)+strcoeff(3))/3;
 
 syms p
-equ = 3*exhaust_media*log((1+p*exhaust_media)/(p*exhaust_media*strcoeff_media)) == deltaV;
-p_guess = solve(equ); %-3.294612e-4
+equ = 3*exhaust_media*log((1+p*exhaust_media)/(p*exhaust_media*strcoeff_media)) == deltav;
+p_guess = solve(equ); %-4.3851e-04
 
-%Funcion 1
+%Funcion 1 dios mio si no hago esto no va D;
+exhaust1=exhaust(1);
+exhaust2=exhaust(2);
+exhaust3=exhaust(3);
+strcoeff1=strcoeff(1);
+strcoeff2=strcoeff(2);
+strcoeff3=strcoeff(3);
 fun = @f;
-p = fzero(fun, double(p_guess),[],exhaust(1),exhaust(2),exhaust(3),strcoeff(1),strcoeff(2),strcoeff(3),deltav);
+p = fzero(fun, double(p_guess),[],exhaust1,exhaust2,exhaust3,strcoeff1,strcoeff2,strcoeff3,deltav);
 
 %Mass ratio for each stage (2 < Λ < 10)
-mass_rat = ([1, 1, 1]+p.*exhaust)/(p.*exhaust.*strcoeff)
-mass_rat = (1+p*exhaust)/(p.*exhaust.*strcoeff)
-Mass_ratio1 = (1+p*c1)/(p*c1*e1);
-Mass_ratio2 = (1+p*c2)/(p*c2*e2);
+mass_rat = (1+p*exhaust)./(p*exhaust.*strcoeff);
 
 %PL ratio for each stage (0.01 < 𝜆 < 0.2)
-PL_ratio1 = (1-Mass_ratio1*e1)/((1-e1)*Mass_ratio1);
-PL_ratio2 = (1-Mass_ratio2*e2)/((1-e2)*Mass_ratio2);
+pl_rat = (1-mass_rat.*strcoeff)./((1-strcoeff).*mass_rat);
 
 %Total PL ratio
-total_PL_ratio = PL_ratio1*PL_ratio2;
+tot_pl_rat = pl_rat(1)*pl_rat(2)*pl_rat(3);
 
 %GMLO
-M_0 = M_PL/total_PL_ratio
+m0 = mission.mpl/tot_pl_rat;
+rocket.m0 = m0; % No me lo esta guardando
+
+
+syms mp1
+equ = mass_rat(1)==m0/(m0-mp1);
+mp1 = double(solve(equ,mp1));
+
+syms ms1
+equ = strcoeff(1)==ms1/(ms1+mp1);
+ms1 = double(solve(equ,ms1));
+
+syms m02
+equ = m0==m02+ms1+mp1;
+m02 = double(solve(equ,m02));
+
+syms mp2
+equ = mass_rat(2)==m02/(m02-mp2);
+mp2 = double(solve(equ,mp2));
+
+syms ms2
+equ = strcoeff(2)==ms2/(ms2+mp2);
+ms2 = double(solve(equ,ms2));
+
+syms m03
+equ = pl_rat(2)==m03/m02;
+m03 = double(solve(equ,m03));
+
+syms mp3
+equ = mass_rat(3)==m03/(m03-mp3);
+mp3 = double(solve(equ,mp3));
+
+
+
+syms mp3
+equ = mass_rat(3)==m03/(m03-mp3);
+mp3 = double(solve(equ,mp3));
+
+
 
 % PL_ratio = M_PL / M_0;                  % Payload Ratio
 % Str_Eff = M_str / (M_str + M_PL);       % Structural efficiency
