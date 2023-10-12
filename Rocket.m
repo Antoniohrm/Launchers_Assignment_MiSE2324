@@ -1,9 +1,11 @@
 classdef Rocket
     properties
 
-        isp = [310, 310, 330]           % s
-        strcoeff = [0.10, 0.12, 0.14]   % %
-        aerosurf = 1                    % m2
+        %Rocket parameters
+
+        isp = [310, 310, 330];          % s
+        strcoeff = [0.10, 0.12, 0.14];  % %
+        aerosurf = 1;                   % m2
         nozzlesurf = [0.6, 0.3]         % m2
         nozzlepress = [40000, 10000]    % Pa
         cddata = [0.2,  0.27;
@@ -24,33 +26,61 @@ classdef Rocket
                   5.5,  0.23;
                   6,    0.22;
                   6.5,  0.21
-                ]
+                ];
 
-        % Rocket parameters
-        pe = [40000, 10000];    % Pa
-        Ae = [0.6, 0.3];        % m2
+        % State vectors
 
-        % Calculated parameters
-        m0 = zeros(3, 1);       % kg
-        ms = zeros(3, 1);       % kg
-        mp = zeros(3, 1);       % kg
-        T = zeros(3, 1);        % N
-        mdot = zeros(3, 1);     % kg/s
-        td = zeros(3, 1);       % s
+        r = zeros(1, 3);        % m    (Position in ECI)
+        v = zeros(1, 3);        % m/s  (Velocity in ECI)
+        vdot = zeros(1, 3);     % m/s2 (Acceleration in ECI)
+        
+        % Calculated parameters, initialized to 0
+
+        cexh = zeros(1, 3);     % m/s (Exhaust velocity)
+        mratio = zeros(1, 3);   % (Mass ratio per stage)
+        plratio = zeros(1, 3);  % (Payload ratio per stage)
+        m0 = zeros(1, 3);       % kg (Subrocket mass per stage
+        mstr = zeros(1, 3);     % kg
+        mprop = zeros(1, 3);    % kg
+        th = zeros(1, 3);       % N
+        mdot = zeros(1, 3);     % kg/s
+        tstage = zeros(1, 3);   % s
         
     end
 
     methods
 
-        function r = cd(obj, m)
+        function res = cd(obj, m)
             if m <= obj.cddata(1, 1)
-                r = obj.cddata(1, 2);
+                res = obj.cddata(1, 2);
             elseif m >= obj.cddata(size(obj.cddata, 1), 1)
-                r = obj.cddata(size(obj.cddata, 1), 2);
+                res = obj.cddata(size(obj.cddata, 1), 2);
             else
-                r = 0;
+                diff = -1;
+                it = 1;
+
+                while diff <= 0
+                    diff = obj.cddata(it, 1) - m;
+                    it = it + 1;
+                end
+
+                inc = obj.cddata(it - 1, 1) - obj.cddata(it - 2, 1);
+                cont1 = obj.cddata(it - 2, 2) * (1 - (m - obj.cddata(it - 2, 1)) / inc);
+                cont2 = obj.cddata(it - 1, 2) * (1 - (obj.cddata(it - 1, 1) - m) / inc);
+                res = cont1 + cont2;
             end
         end
+
+        function res = r0(obj, Mission)
+            res = [Mission.re * cosd(Mission.latlaunch);
+                0;
+                Mission.re * sind(Mission.latlaunch)];
+        end
+
+        function res = cexhcalc(obj, Mission)
+            res = Mission.g .* obj.isp;
+        end
+
     end
 
 end

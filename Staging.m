@@ -1,11 +1,4 @@
-function [Rocket] = Staging(Rocket, Mission)
-
-    Rocket = Rocket;
-    Mission = Mission;
-    
-    Rocket.r(1, :) = Rocket.r0(Mission);
-    Rocket.cexh = Rocket.cexhcalc(Mission);
-    
+function [Rocket, Mission] = Staging(Rocket, Mission)
     
     % Rocket parameters
     strcoeff = Rocket.strcoeff;

@@ -9,7 +9,7 @@ options = [];%odeset('RelTol',1e-8,'AbsTol',1e-7);
 % if I want a more accurate solution, then
 % options = odeset('RelTol',1e-8,'AbsTol',1e-7);
 %
-[tSol xSol] = ode45(@der,[0 3*T], x0, options, w);
+[tSol xSol] = ode45(@der,[0 3*T], x0, options, w)
 
 figure 
 plot(tSol, xSol,'r*')
