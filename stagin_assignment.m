@@ -4,7 +4,10 @@ mission = Mission;
 
 re = mission.re;
 wEarth = mission.wEarth;
-g = mission.g
+g = mission.g;
+
+pe = rocket.pe;
+Ae = rocket.Ae;
 
 % Delta V for 700km??
 % Kourou launch base in ECI. Inertial equatorial RF
@@ -92,6 +95,20 @@ ms3 = double(solve(equ,ms3));
 % Thrust and mass flow rate according to launcher architecture
 
 T1 = (m0-mp1)*6*g;           % N
+% Esta equacion depende de pa por lo que tenemos que usar expEarthAtm
+% El problema es que no se cuanto dura la primera etapa
+% T = mdot*exhaust+(pe-pa)*Ae;
+% altitude = linspace(0, 100000, 10);
+% [rho,press,temp,a] = expEarthAtm(altitude);
+% mdot1 = (T1-(pe(1)-press)*Ae(1))/exhaust(1);
+% plot(mdot1,altitude)
+% xlabel('Mass flow rate')
+% ylabel('Altitude')
+
+T2 = (m02-mp2)*6*g;
+
+% Para hacerlo sencillo esto
+T1 = (m0-mp1)*6*g;
 mdot1 = T1/exhaust(1);       % kg/s
 
 T2 = (m02-mp2)*6*g;          % N

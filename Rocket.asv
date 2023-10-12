@@ -20,11 +20,41 @@ classdef Rocket
                   3,    0.33;
                   3.5,  0.3;
                   4,    0.28;
-                  4.5, 0.26;
-                  5, 0.24;
-                  5.5, 0.23;
-                  6, 0.22;
-                  6.5, 0.21
+                  4.5,  0.26;
+                  5,    0.24;
+                  5.5,  0.23;
+                  6,    0.22;
+                  6.5,  0.21
                 ]
+
+        % Rocket parameters
+        m0 = 0;         %kg
+        Pe1 = 40000     %Pa
     end
+
+    methods
+
+        function r = cd(obj, m)
+            if m <= obj.cddata(1, 1)
+                r = obj.cddata(1, 2);
+            elseif m >= obj.cddata(size(obj.cddata, 1), 1)
+                r = obj.cddata(size(obj.cddata, 1), 2);
+            else
+                r = 0;
+            end
+        end
+    end
+
 end
+
+
+
+
+
+
+
+
+
+
+
+

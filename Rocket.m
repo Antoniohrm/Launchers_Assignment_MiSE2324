@@ -28,7 +28,9 @@ classdef Rocket
                 ]
 
         % Rocket parameters
-        m0 = 0;
+        m0 = 0;                 % kg
+        pe = [40000, 10000];    % Pa
+        Ae = [0.6, 0.3];        % m2
     end
 
     methods

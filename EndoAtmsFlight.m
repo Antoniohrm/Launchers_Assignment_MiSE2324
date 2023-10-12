@@ -23,7 +23,7 @@ options = [];
 
 v0 = cross(wEarthVec,r0); % Inertial velocity, ECI
 x0 = [r0 v0]; %Initial conditions
-% [tVR SolVR] = ode45(@endoFlightDeriv,[0 tfinal], x0, options,?,?);
+% [tVR SolVR] = ode45(@endoFlightDeriv,[0 tfinal], x0, options,mission,rocket);
 
 
 
