@@ -22,7 +22,7 @@ options = [];
 % options = odeset('Events',@hFinal,'RelTol',1e-4,'AbsTol',1e-6);
 
 v0 = cross(wEarthVec,r0); % Inertial velocity, ECI
-x0 = [r0 v0]; %Initial conditions
+x0 = [r0 v0]; %Initial conditions, state vector?
 % [tVR SolVR] = ode45(@endoFlightDeriv,[0 tfinal], x0, options,mission,rocket);
 
 

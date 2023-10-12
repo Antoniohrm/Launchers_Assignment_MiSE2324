@@ -57,8 +57,6 @@ tot_pl_rat = pl_rat(1)*pl_rat(2)*pl_rat(3);
 
 %GMLO
 m0 = mission.mpl/tot_pl_rat;
-rocket.m0 = m0; % No me lo esta guardando
-
 
 syms mp1
 equ = mass_rat(1)==m0/(m0-mp1);
@@ -92,23 +90,16 @@ syms ms3
 equ = strcoeff(3)==ms3/(ms3+mp3);
 ms3 = double(solve(equ,ms3));
 
+%Saving calculated values in Rocket
+mp = [mp1 mp2 mp3];
+ms = [ms1 ms2 ms3];
+m0 = [m0 m02 m03];
+rocket.m0 = m0;
+rocket.mp = mp;
+rocket.ms = ms;
+
 % Thrust and mass flow rate according to launcher architecture
-
 T1 = (m0-mp1)*6*g;           % N
-% Esta equacion depende de pa por lo que tenemos que usar expEarthAtm
-% El problema es que no se cuanto dura la primera etapa
-% T = mdot*exhaust+(pe-pa)*Ae;
-% altitude = linspace(0, 100000, 10);
-% [rho,press,temp,a] = expEarthAtm(altitude);
-% mdot1 = (T1-(pe(1)-press)*Ae(1))/exhaust(1);
-% plot(mdot1,altitude)
-% xlabel('Mass flow rate')
-% ylabel('Altitude')
-
-T2 = (m02-mp2)*6*g;
-
-% Para hacerlo sencillo esto
-T1 = (m0-mp1)*6*g;
 mdot1 = T1/exhaust(1);       % kg/s
 
 T2 = (m02-mp2)*6*g;          % N
@@ -117,11 +108,18 @@ mdot2 = T2/exhaust(2);       % kg/s
 T3 = (m03-mp3)*4*g;          % N
 mdot3 = T3/exhaust(3);       % kg/s
 
-
 % Duration of each stage
 td1= mp1/mdot1; % pff, muchos segundos
 td2= mp2/mdot2;
 td3= mp3/mdot3;
+
+%Saving variables
+T = [T1 T2 T3];
+mdot = [mdot1 mdot2 mdot3];
+td = [td1 td2 td3];
+rocket.T = T;
+rocket.mdot = mdot;
+rocket.td = td;
 
 a=2;
 

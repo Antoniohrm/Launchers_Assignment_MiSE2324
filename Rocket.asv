@@ -3,7 +3,6 @@ classdef Rocket
 
         isp = [310, 310, 330]           % s
         strcoeff = [0.10, 0.12, 0.14]   % %
-        mstruct = zeros(3, 1)           % kg
         aerosurf = 1                    % m2
         nozzlesurf = [0.6, 0.3]         % m2
         nozzlepress = [40000, 10000]    % Pa
@@ -28,8 +27,12 @@ classdef Rocket
                 ]
 
         % Rocket parameters
-        m0 = 0;         %kg
-        Pe1 = 40000     %Pa
+        m0 = 0;                 % kg
+        pe = [40000, 10000];    % Pa
+        Ae = [0.6, 0.3];        % m2
+
+        % Calculated parameters
+        mstruct = zeros(3, 1);          % kg
     end
 
     methods
