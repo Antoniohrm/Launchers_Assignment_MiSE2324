@@ -28,11 +28,15 @@ classdef Rocket
                   6.5,  0.21
                 ];
 
-        % State vectors
+        % State
 
         r = zeros(1, 3);        % m    (Position in ECI)
         v = zeros(1, 3);        % m/s  (Velocity in ECI)
         vdot = zeros(1, 3);     % m/s2 (Acceleration in ECI)
+
+        actstage = 1;           % (Currently active stage)
+
+
         
         % Calculated parameters, initialized to 0
 
@@ -77,8 +81,16 @@ classdef Rocket
                 Mission.re * sind(Mission.latlaunch)];
         end
 
+        function res = v0(obj, Mission)
+            res = 0; % TO BE COMPLETED
+        end
+
         function res = cexhcalc(obj, Mission)
             res = Mission.g .* obj.isp;
+        end
+
+        function res = h(obj, Mission)
+            res = norm(obj.r) - Mission.re;
         end
 
     end

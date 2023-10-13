@@ -1,8 +1,5 @@
 function [Rocket, Mission] = Staging(Rocket, Mission)
     
-    % Rocket parameters
-    strcoeff = Rocket.strcoeff;
-    
     % For initial guess of p
     cexh_avg = mean(Rocket.cexh);
     strcoeff_avg = mean(Rocket.strcoeff);
