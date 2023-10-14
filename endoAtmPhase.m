@@ -1,18 +1,16 @@
-function [stateint, Rocket, Mission] = endoAtmPhase(Rocket, Mission)
+function [t, state, Rocket, Mission] = endoAtmPhase(Rocket, Mission)
 
-state = zeros(1, 7);
-state(1:3) = Rocket.r(1, :);
-%state(4:6) = Rocket.v(1, :);
-state(4:6) = [1, 1, 1];
-state(7) = Rocket.m0(1);
+state0 = zeros(1, 7);
+state0(1:3) = Rocket.r(1, :);
+state0(4:6) = Rocket.v(1, :);
+%state0(4:6) = [1, 1, 1];
+state0(7) = Rocket.m0(Rocket.actstage);
 
-max_time = 60;
+max_time = Rocket.tstage(1);
 curstate = [];
 
-%[t, stateint] = ode45(@(t, curstate) endoAtmDer(t, curstate, Rocket, Mission), [0, max_time], state);
-[t, ders] = endoAtmDer(0, state, Rocket, Mission)
-% w = Rocket.m0(1) * Mission.g * sind(Mission.latlaunch)
-% w = Rocket.m0(1) * Mission.g * cosd(Mission.latlaunch)
-
+[t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, max_time], state0);
+%[t, ders] = endoAtmDer(0, state0, Rocket, Mission)
+% size(ders)
 
 end

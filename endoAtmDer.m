@@ -1,4 +1,4 @@
-function [t, ders] = endoAtmDer(t, state, Rocket, Mission)
+function [ders] = endoAtmDer(t, state, Rocket, Mission)
 
 ders = zeros(1, 7);      % [rxdot, rydot, rzdot, vxdot, vydot, vzdot, mdot]
 
@@ -13,7 +13,7 @@ stage = Rocket.actstage; % Just to keep the code more readable
 thrust = ((Rocket.mdot(stage) * Rocket.isp(stage) * Mission.g) + ...
     (Rocket.nozzlepress(stage) - p) * Rocket.nozzlesurf(stage)) * ...
     (state(1:3) / norm(state(1:3)));
-thrust = thrust * (Rocket.h(Mission) < 100); % Bool to cut of engine after VR
+%thrust = thrust * ((norm(state(1:3)) - Mission.re) < 100); % Bool to cut of engine after VR
 
 % Drag is also directed along the velocity vector, but in the opposite
 % direction
