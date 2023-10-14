@@ -1,6 +1,6 @@
 function [ders] = endoAtmDer(t, state, Rocket, Mission)
 
-ders = zeros(1, 7);      % [rxdot, rydot, rzdot, vxdot, vydot, vzdot, mdot]
+ders = zeros(1, 7);      % [rxdot, rydot, rzdot, vxdot, vydot, vzdot, mdot, dp]
 
 [dens, p, ~, a] = expEarthAtm(norm(state(1:3)) - Mission.re);
 
@@ -9,9 +9,13 @@ stage = Rocket.actstage; % Just to keep the code more readable
 % Calculation of ECI position unit vector, relative velocity vector
 % and relative velocity unit vector
 
-vunit = state(1:3) / norm(state(1:3));
-vrel = state(4:6) - cross([0, 0, Mission.we], state(4:6));
-vrelunit = vrel / norm(vrel);
+vunit = state(4:6) / norm(state(4:6));
+vrel = state(4:6) - transpose(cross([0, 0, Mission.we], state(1:3)));
+vrelunit = vrel / norm(vrel); % Ojo, todo NANS en primera iteracion
+nanIndices = isnan(vrelunit); % % Find NaN values
+vrelunit(nanIndices) = 0; % Replace NaN values with a 0
+
+runit = state(1:3) / norm(state(1:3));
 
 
 % Thrust is calculated in three lines to help keep the code readable,
@@ -21,10 +25,10 @@ vrelunit = vrel / norm(vrel);
 thrustval = ((Rocket.mdot(stage) * Rocket.isp(stage) * Mission.g) + ...
     (Rocket.nozzlepress(stage) - p) * Rocket.nozzlesurf(stage));
 
-thrustvec = (vunit * ((norm(state(1:3)) - Mission.re) < Mission.vrlim)) + ...
+thrustvec = (runit * ((norm(state(1:3)) - Mission.re) < Mission.vrlim)) + ...
     (vrelunit * ((norm(state(1:3)) - Mission.re) >= Mission.vrlim));
 
-thrust = thrustval * thrustvec
+thrust = thrustval * thrustvec;
 
 
 % Drag is also directed along the velocity vector, but in the opposite
@@ -34,20 +38,26 @@ mach = norm(state(4:6)) / a;    % In a separate line to keep the code readable
 % drag = (0.5 * dens * (norm(state(4:6))^2) * Rocket.aerosurf * Rocket.cd(mach)) * ...
     %(-1 * state(4:6) / norm(state(4:6)));
 
-drag = (0.5 * dens * (norm(vrel)^2) * Rocket.aerosurf * 0.25) * ...
-    (vunit * ((norm(state(1:3)) - Mission.re) < Mission.vrlim) + ...
-    (vrelunit * ((norm(state(1:3)) - Mission.re) >= Mission.vrlim)));
+dragval = (0.5 * dens * (norm(vrel)^2) * Rocket.aerosurf * Rocket.cd(mach));
+
+drag_vec = -(runit * ((norm(state(1:3)) - Mission.re) < Mission.vrlim)) + ...
+    (vrelunit * ((norm(state(1:3)) - Mission.re) >= Mission.vrlim));
+
+drag = dragval * drag_vec;
 
 
 weight = -1 * state(7) * (Mission.mu / (norm(state(1:3))^3)) * state(1:3);
 
 ders(1:3) = state(4:6);
-ders(4:6) = (thrust + weight) / state(7);
+ders(4:6) = (thrust + drag + weight) / state(7);
 %ders(4:6) = [1, 1, 1];
 
 %ders(4:6) = [0, 0, 0];
 
 ders(7) = -1 * Rocket.mdot(stage);
+
 ders = transpose(ders);
+
+
 
 end

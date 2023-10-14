@@ -17,9 +17,18 @@ vel = [];
 for i = 1:length(state(:, 1))
     alt(i) = norm(state(i, 1:3)) - Mission.re;
     vel(i) = norm(state(i, 4:6));
+%     dp(i) = norm(state(i, 8));
 end
 
 figure(1)
-plot(t, alt)
+plot(t, alt/1000)
+xlabel('Time [s]')
+ylabel('Altitude [km]')
 figure(2)
-plot(t, vel)
+plot(t, vel/1000)
+xlabel('Time [s]')
+ylabel('Velocity [km/s]')
+
+% Stage 1 maximum dynamic pressure peak of 45,000 Pa
+% figure(3)
+% plot(t, dp)

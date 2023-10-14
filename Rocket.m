@@ -36,6 +36,8 @@ classdef Rocket
 
         actstage = 1;           % (Currently active stage)
 
+        dp = 0;       % Pa (Dynamic pressure)
+
 
         
         % Calculated parameters, initialized to 0
@@ -49,6 +51,7 @@ classdef Rocket
         th = zeros(1, 3);       % N
         mdot = zeros(1, 3);     % kg/s
         tstage = zeros(1, 3);   % s
+        
         
     end
 
@@ -92,6 +95,10 @@ classdef Rocket
         function res = h(obj, Mission)
             res = norm(obj.r) - Mission.re;
         end
+
+%         function res = dypressure(obj, dp)
+%             res = 0.5 * dens * vrel^2
+%         end
 
     end
 
