@@ -82,7 +82,7 @@ classdef Rocket
         end
 
         function res = v0(obj, Mission)
-            res = 0; % TO BE COMPLETED
+            res = cross([0, 0, Mission.we], obj.r(1, :));
         end
 
         function res = cexhcalc(obj, Mission)
