@@ -1,19 +1,31 @@
-function [t, ders] = endoAtmDer(t, state, Rocket, Mission)
+function [ders] = endoAtmDer(t, state, Rocket, Mission)
 
 ders = zeros(1, 7);      % [rxdot, rydot, rzdot, vxdot, vydot, vzdot, mdot]
 
-[dens, p, ~, a] = expEarthAtm(Rocket.h(Mission));
+[dens, p, ~, a] = expEarthAtm(norm(state(1:3)) - Mission.re);
 
 stage = Rocket.actstage; % Just to keep the code more readable
+
+% Calculation of ECI position unit vector, relative velocity vector
+% and relative velocity unit vector
+
+vunit = state(1:3) / norm(state(1:3));
+vrel = state(4:6) - cross([0, 0, Mission.we], state(4:6));
+vrelunit = vrel / norm(vrel);
+
 
 % Thrust is calculated in three lines to help keep the code readable,
 % also, assuming that AoA is always 0, it will always be directed along
 % the velocity vector direction
 
 thrust = ((Rocket.mdot(stage) * Rocket.isp(stage) * Mission.g) + ...
-    (Rocket.nozzlepress(stage) - p) * Rocket.nozzlesurf(stage)) * ...
-    (state(4:6) / norm(state(4:6)));
-thrust = thrust * (Rocket.h(Mission) < 100); % Bool to cut of engine after VR
+    (Rocket.nozzlepress(stage) - p) * Rocket.nozzlesurf(stage));
+
+thrustvec = (vunit *((norm(state(1:3)) - Mission.re) < Mission.vrlim)) + ...
+    (vrelunit * ((norm(state(1:3)) - Mission.re) >= Mission.vrlim);
+
+thrust = thrustval * thrus
+
 
 % Drag is also directed along the velocity vector, but in the opposite
 % direction
@@ -21,15 +33,17 @@ mach = norm(state(4:6)) / a;    % In a separate line to keep the code readable
 % drag = (0.5 * dens * (norm(state(4:6))^2) * Rocket.aerosurf * Rocket.cd(mach)) * ...
     %(-1 * state(4:6) / norm(state(4:6)));
 
-drag = (0.5 * dens * (norm(state(4:6))^2) * Rocket.aerosurf * 0.25) * ...
-    (-1 * state(4:6) / norm(state(4:6)));
+drag = (0.5 * dens * (norm(vrel)^2) * Rocket.aerosurf * 0.25) * ...
+    (vunit * ((norm(state(1:3)) - Mission.re) < Mission.vrlim) + ...
+    (vrelunit * ((norm(state(1:3)) - Mission.re) >= Mission.vrlim)))
 
 
 weight = -1 * state(7) * (Mission.mu / (norm(state(1:3))^3)) * state(1:3);
 
 ders(1:3) = state(4:6);
-%ders(4:6) = thrust + weight + drag;
-ders(4:6) = drag;
+%ders(4:6) = (thrust + weight + drag) / state(7);
+ders(4:6) = [1, 1, 1];
+
 %ders(4:6) = [0, 0, 0];
 
 ders(7) = -1 * Rocket.mdot(stage);

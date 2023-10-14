@@ -16,7 +16,7 @@ classdef Mission
         mpl = 300                       % kg
         maxg = [6, 6, 4]                % g's
         maxq = 45000                    % Pa
-        vrlim = 100                     % m (End of vertical rising)
+        vrlim =
 
         % Assumptions
 
