@@ -6,10 +6,11 @@ state(4:6) = Rocket.v(1, :);
 state(7) = Rocket.m0(1);
 
 max_time = 60;
-cu
+curstate = [];
 
-[t, stateint] = ode45(@(t, stateint) endoAtmDer(t, state, Rocket, Mission), [0, max_time], state);
-
+%[t, stateint] = ode45(@(t, curstate) endoAtmDer(t, curstate, Rocket, Mission), [0, max_time], state);
+[t, ders] = endoAtmDer(0, state, Rocket, Mission)
+w = Rocket.r(0)
 
 
 end

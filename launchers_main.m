@@ -8,5 +8,5 @@ Mission = Mission;
 Rocket.r(1, :) = Rocket.r0(Mission);
 Rocket.cexh = Rocket.cexhcalc(Mission);
 
-[Rocket, Mission] = Staging(Rocket, Mission);
+[Rocket, Mission] = Staging(Rocket, Mission)
 [stateint, Rocket, Mission] = endoAtmPhase(Rocket, Mission);
