@@ -12,6 +12,14 @@ function [Rocket, Mission] = Staging(Rocket, Mission)
     %Funcion 1
     fun = @f;
     p = fzero(fun, double(p_guess),[],Rocket.cexh, Rocket.strcoeff, Mission.deltav);
+
+    % Funcion mejorada     
+%     equation = f2(Rocket.cexh, Rocket.strcoeff, Mission.deltav);
+%     fun = @(p)(Rocket.cexh(1)*log((1+p*Rocket.cexh(1))/(p*Rocket.cexh(1)*Rocket.strcoeff(1)))) + ...
+%                     (Rocket.cexh(2)*log((1+p*Rocket.cexh(2))/(p*Rocket.cexh(2)*Rocket.strcoeff(2)))) + ...
+%                     (Rocket.cexh(3)*log((1+p*Rocket.cexh(3))/(p*Rocket.cexh(3)*Rocket.strcoeff(3)))) - Mission.deltav;
+%     p0 = -1;
+%     p2 = fsolve(fun,p0) % da lo mismo
     
     %Mass ratio for each stage (2 < Λ < 10)
     Rocket.mratio = (1 + (p * Rocket.cexh)) ./ (p * Rocket.cexh .* Rocket.strcoeff);

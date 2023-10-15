@@ -9,7 +9,7 @@ stage = Rocket.actstage; % Just to keep the code more readable
 % Calculation of ECI position unit vector, relative velocity vector
 % and relative velocity unit vector
 
-vunit = state(4:6) / norm(state(4:6));
+vunit = state(4:6) / norm(state(4:6)); % ECI
 vrel = state(4:6) - transpose(cross([0, 0, Mission.we], state(1:3)));
 vrelunit = vrel / norm(vrel); % Ojo, todo NANS en primera iteracion
 nanIndices = isnan(vrelunit); % % Find NaN values
