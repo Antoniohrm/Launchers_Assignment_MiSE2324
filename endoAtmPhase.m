@@ -1,4 +1,4 @@
-function [t, state, dypress, Rocket, Mission] = endoAtmPhase(Rocket, Mission)
+function [t, state, te, ye, dypress, Rocket, Mission] = endoAtmPhase(Rocket, Mission)
 
 state0 = zeros(1, 7);
 state0(1:3) = Rocket.r(1, :);
@@ -7,10 +7,18 @@ state0(7) = Rocket.m0(Rocket.actstage);
 
 
 inttime = Rocket.tstage;
-
-[t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], state0);
+% options = [];
+options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelTol',1e-9,'AbsTol',1e-8);
+% [t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], options, state0);
+[t, state, te, ye, ie] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], state0, options);
 % [ders] = endoAtmDer(0, state0, Rocket, Mission)
+% te is a column vector of the times at which events occurred
+% It give us the time when the event happened
+% ye contains the solution value at each of the event times in te
+% No entiendo los valores que da
+
 % size(ders)
+
 % t = 0;
 
 % To calculate dynamic pressure
