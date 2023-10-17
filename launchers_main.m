@@ -10,7 +10,7 @@ Rocket.v(1, :) = Rocket.v0(Mission);
 Rocket.cexh = Rocket.cexhcalc(Mission);
 
 [Rocket, Mission] = Staging(Rocket, Mission);
-[t, state, Rocket, Mission] = endoAtmPhase(Rocket, Mission);
+[t, state, dypress, Rocket, Mission] = endoAtmPhase(Rocket, Mission);
 
 alt = [];
 vel = [];
@@ -30,5 +30,9 @@ xlabel('Time [s]')
 ylabel('Velocity [km/s]')
 
 % Stage 1 maximum dynamic pressure peak of 45,000 Pa
-% figure(3)
-% plot(t, dp)
+figure(3)
+plot(t, dypress, 'b-')
+hold on
+plot([t(1),t(end)], [Mission.maxq, Mission.maxq],'r-')
+xlabel('Time [s]')
+ylabel('Dynamic Pressure [Pa]')

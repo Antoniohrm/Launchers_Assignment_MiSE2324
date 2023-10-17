@@ -36,9 +36,6 @@ classdef Rocket
 
         actstage = 1;           % (Currently active stage)
 
-        dp = 0;       % Pa (Dynamic pressure)
-
-
         
         % Calculated parameters, initialized to 0
 
