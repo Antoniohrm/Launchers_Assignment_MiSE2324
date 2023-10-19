@@ -32,4 +32,29 @@ for i = 1:length(state)
     dypress(i,1) = 0.5 * dens(i,1) * norm(vrel(i,1:3))^2;
 end
 
+% Velocity at the end of the VR, 100m
+
+tol = 0.001;
+pos = find(abs(t - te(1)) < tol);
+mediumpos = pos(1) + ceil((pos(end)-pos(1))/2); %Position that we arrive to 100m
+
+vel = [];
+for i = 1:length(state(:, 1))
+    vel(i) = norm(state(i, 4:6));
+end
+% Time arrival to VR
+tvr = t(mediumpos);             % Time until end of VR
+vvr = vel(mediumpos);           % Velocity at the end of VR
+
+% Instantaneus Kick Angle
+kick = 1;               % deg
+runit = state(1:3) / norm(state(1:3));
+eunit = cross([0 0 Mission.we], runit) / norm(cross([0 0 Mission.we], runit));
+vgtvec = vvr * (cosd(kick) * runit + sind(kick) * eunit);
+
+
+
+
+
+
 end

@@ -90,7 +90,7 @@ classdef Rocket
         end
 
         function res = h(obj, Mission)
-            res = norm(obj.r) - Mission.re;
+            res = norm(obj.r(length(obj.r),:)) - Mission.re;
         end
 
 %         function res = dypressure(obj, dp)

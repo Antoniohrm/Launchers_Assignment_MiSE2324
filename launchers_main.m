@@ -24,7 +24,7 @@ for i = 1:length(state(:, 1))
 end
 
 tol = 0.001;
-pos = find(abs(t - te(1)) < tol)
+pos = find(abs(t - te(1)) < tol);
 mediumpos = pos(1) + ceil((pos(end)-pos(1))/2); %Position that we arrive to 100m
 
 figure(1)
@@ -34,12 +34,10 @@ plot(t(mediumpos:end), alt(mediumpos:end)/1000)
 xlabel('Time [s]')
 ylabel('Altitude [km]')
 
-figure(1)
-plot(t, alt/1000)
-xlabel('Time [s]')
-ylabel('Altitude [km]')
 figure(2)
-plot(t, vel/1000)
+plot(t(1:mediumpos), vel(1:mediumpos)/1000)
+hold on
+plot(t(mediumpos:end), vel(mediumpos:end)/1000)
 xlabel('Time [s]')
 ylabel('Velocity [km/s]')
 
