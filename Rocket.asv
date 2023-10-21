@@ -102,7 +102,8 @@ classdef Rocket
 
         function res = applyKickangle(obj, Mission)
             runit = obj.r(end, :) / norm(obj.r(end, :));
-            e = cross([0, 0, Mission.werad], obj.r(end, :));
+            %e = cross([0, 0, Mission.werad], obj.r(end, :));
+            e = cross([0, 0, 1], runit);
             eunit = e / norm(e);
 
             vrelpitched = norm(obj.vrel(end, :)) * ((cosd(obj.kickangle) * runit) + (sind(obj.kickangle) * eunit));

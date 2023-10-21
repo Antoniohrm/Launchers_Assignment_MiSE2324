@@ -7,7 +7,7 @@ classdef Mission
         mu = 3.886e14                   % m3/s2
         re = 6371e3                     % m
         we = (2 * pi) / (24 * 60 * 60); % deg/s    
-        wearth = 7.2921159e-5;          % rad
+        %werad = 7.2921159e-5;           % rad/s
         latlaunch = 5.2                 % deg (North)
 
         % Constraints
@@ -26,12 +26,16 @@ classdef Mission
 
     methods
 
-        function r = orbitv(obj)
-            r = sqrt(obj.mu / (obj.re + obj.horbit));
+        function res = orbitv(obj)
+            res = sqrt(obj.mu / (obj.re + obj.horbit));
         end
 
-        function r = deltav(obj)
-            r = obj.orbitv + obj.excessdeltav;
+        function res = deltav(obj)
+            res = obj.orbitv + obj.excessdeltav;
+        end
+
+        function res = werad(obj)
+            res = obj.we * (pi / 180);
         end
         
     end
