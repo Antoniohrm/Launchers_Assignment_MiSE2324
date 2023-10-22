@@ -15,7 +15,7 @@ opt0Sc = [propt * 1e-2, prU, pvU];
 state0 = [Rocket.r(end, :), Rocket.v(end, :)];
 
 %Time optimization bounds
-xBound(1, 1:2) = [50 propt]*1e-2; % normalized
+xBound(1, 1:2) = [10 propt]*1e-2; % normalized
 % Thrust angular velocity (pru) optimization bounds
 xBound(2, 1:2) = [-1 1]*30*pi/180; % Thrust angular velocity pr is limited at 30 deg/s
 xBound(3, 1:2) = [-1 1]*30*pi/180;
@@ -35,15 +35,22 @@ nonlcon = @costFunc;
 options = optimoptions('fmincon','Display','iter', 'Algorithm', 'sqp','MaxFunctionEvaluations',3000);
 Xsc = fmincon(@fSolveFun,opt0Sc',[],[],[],[],[xlb],[xub],@(x) nonlcon(x, Rocket, Mission), options);
 
-propTime = Xsc(1)*1e+2;
+propTime = Xsc(1)*1e+2
 %
 agstate = [state0, Xsc(2:4)', Xsc(5:7)', Rocket.m0(Rocket.actstage)];
 
-[t,  state] = ode45(@(t, state) exoAtmDer(t, state, Rocket, Mission), [0 propTime], agstate);
-
+[t,  state] = ode45(@(t, state) exoAtmDer(t, state, Rocket, Mission), [0, propTime], agstate);
 Rocket.r = [Rocket.r; state(:, 1:3)];
 Rocket.v = [Rocket.v; state(:, 4:6)];
 Rocket.m = [Rocket.m; state(:, 13)];
+Rocket.t = [Rocket.t; t + Rocket.t(end)];
+Rocket.vrel = Rocket.vrelCalc(Mission);
+
+options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelTol',1e-9,'AbsTol',1e-8);
+[t, state, te, ye, ie] = ode45(@(t, state) ballisticDer(t, state, Rocket, Mission), [0, 1000], [Rocket.r(end, :), Rocket.v(end, :)], options);
+
+Rocket.r = [Rocket.r; state(:, 1:3)];
+Rocket.v = [Rocket.v; state(:, 4:6)];
 Rocket.t = [Rocket.t; t + Rocket.t(end)];
 Rocket.vrel = Rocket.vrelCalc(Mission);
 

@@ -9,6 +9,10 @@ elseif Rocket.actstage == 1
     check(2) = state(7) - (Rocket.m0(1) - Rocket.mprop(1));
     stops(2) = 1;
     direction(2) = -1;
+elseif Rocket.actstage == 3
+    check(3) = h - 700e3;
+    stops(3) = 1;
+    direction(3) = 1;
 end
 
 % h = norm(state(1:3)) - Mission.re;

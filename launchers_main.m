@@ -14,7 +14,13 @@ Rocket.m = Rocket.m0(Rocket.actstage);              % Initialize initial mass
 
 [Rocket, Mission] = Staging(Rocket, Mission);
 [Rocket, Mission] = endoAtmPhase(Rocket, Mission);
-[Rocket, Mission, Xsc] = exoAtmPhase(Rocket, Mission);
+[Rocket, Mission] = exoAtmPhase(Rocket, Mission);
+% [t, state] = ode45(@(t, state) ballisticDer (t, state, Rocket, Mission), [0, 1000], [Rocket.r(end, :), Rocket.v(end, :)]);
+% Rocket.r = [Rocket.r; state(:, 1:3)];
+% Rocket.v = [Rocket.v; state(:, 4:6)];
+% Rocket.t = [Rocket.t; t + Rocket.t(end)];
+% Rocket.vrel = Rocket.vrelCalc(Mission);
+
 
 figure(1)
 
@@ -25,7 +31,7 @@ plot(Rocket.t, Rocket.vrel(:, 2));
 subplot(2, 2, 3)
 plot(Rocket.t, Rocket.vrel(:, 3));
 subplot(2, 2, 4)
-plot(Rocket.t, Rocket.h(Mission));
+plot(Rocket.t, Rocket.h(Mission) * 1e-3);
 
 figure(2)
 

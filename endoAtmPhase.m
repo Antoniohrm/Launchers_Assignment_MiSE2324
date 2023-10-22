@@ -9,7 +9,6 @@ state0(7) = Rocket.m0(Rocket.actstage);
 % First integration, first stage until vertical rising
 
 options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelTol',1e-9,'AbsTol',1e-8);
-% [t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], options, state0);
 [t, state, te, ye, ie] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, Rocket.tstage(Rocket.actstage)], state0, options);
 % [ders] = endoAtmDer(0, state0, Rocket, Mission)
 % te is a column vector of the times at which events occurred
@@ -24,7 +23,6 @@ Rocket.v = state(:, 4:6);
 Rocket.vrel = Rocket.vrelCalc(Mission);
 Rocket.m = state(:, 7);
 Rocket.t = t;
-% norm(Rocket.v(end, :))
 Rocket.v(end, :) = Rocket.applyKickangle(Mission)
 
 state0(1:3) = Rocket.r(end, :);
@@ -32,7 +30,6 @@ state0(4:6) = Rocket.v(end, :);
 state0(7) = Rocket.m(end);
 
 options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelTol',1e-9,'AbsTol',1e-8);
-% [t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], options, state0);
 [t, state, te, ye, ie] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, Rocket.tstage(Rocket.actstage)], state0, options);
 
 Rocket.r = [Rocket.r; state(:, 1:3)];
@@ -61,32 +58,5 @@ Rocket.t = [Rocket.t; t + Rocket.t(end)];
 
 Rocket.actstage = Rocket.actstage + 1;
 Rocket.m(end) = Rocket.m0(Rocket.actstage);
-
-% figure(1)
-% 
-% subplot(1, 3, 1)
-% plot(Rocket.t, vecnorm(transpose(Rocket.v)));
-% subplot(1, 3, 2)
-% plot(Rocket.t, vecnorm(transpose(Rocket.vrel)));
-% subplot(1, 3, 3)
-% plot(Rocket.t, Rocket.v)
-% 
-% figure(2)
-% 
-% subplot(2, 2, 1)
-% plot(Rocket.t, Rocket.vrel(:, 1));
-% subplot(2, 2, 2)
-% plot(Rocket.t, Rocket.vrel(:, 2));
-% subplot(2, 2, 3)
-% plot(Rocket.t, Rocket.vrel(:, 3));
-% subplot(2, 2, 4)
-% plot(Rocket.t, Rocket.h(Mission));
-
-
-
-
-
-
-
 
 end
