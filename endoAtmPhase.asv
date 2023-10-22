@@ -1,4 +1,4 @@
-function [t, state, te, ye, Rocket, Mission] = endoAtmPhase(Rocket, Mission)
+function [Rocket, Mission] = endoAtmPhase(Rocket, Mission)
 
 state0 = zeros(1, 7);
 state0(1:3) = Rocket.r(1, :);
@@ -19,15 +19,32 @@ options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelT
 
 % Velocity at the end of the VR, 100m
 
-Rocket.r = state(:, 1:3);
-Rocket.v = state(:, 4:6);
-Rocket.v(end, :)
-Rocket.r(end, :)
-cross([0, 0, Mission.we], Rocket.v(end, :))
+% Rocket.r = state(:, 1:3);
+% Rocket.v = state(:, 4:6);
 % Rocket.vrel = Rocket.vrelCalc(Mission);
 % Rocket.m = state(end, 7);
+% norm(Rocket.v(end, :))
+Rocket.v(end, :) = Rocket.applyKickangle(Mission)
 
-Rocket.v(end) = Rocket.applyKickangle(Mission)
+figure(1)
+
+subplot(1, 3, 1)
+plot(t, vecnorm(transpose(Rocket.v)));
+subplot(1, 3, 2)
+plot(t, vecnorm(transpose(Rocket.vrel)));
+subplot(1, 3, 3)
+plot(t, Rocket.v)
+% 
+% figure(2)
+% 
+% subplot(2, 2, 1)
+% plot(t, Rocket.v(:, 1));
+% subplot(2, 2, 2)
+% plot(t, Rocket.v(:, 2));
+% subplot(2, 2, 3)
+% plot(t, Rocket.v(:, 3));
+% subplot(2, 2, 4)
+% plot(t, Rocket.h(Mission));
 
 
 % % Time arrival to VR

@@ -1,4 +1,4 @@
-function [t, state, te, ye, Rocket, Mission] = endoAtmPhase(Rocket, Mission)
+function [Rocket, Mission] = endoAtmPhase(Rocket, Mission)
 
 state0 = zeros(1, 7);
 state0(1:3) = Rocket.r(1, :);
@@ -23,8 +23,23 @@ Rocket.r = state(:, 1:3);
 Rocket.v = state(:, 4:6);
 Rocket.vrel = Rocket.vrelCalc(Mission);
 Rocket.m = state(end, 7);
-norm(Rocket.v(end, :))
+Rocket.t = t;
+% norm(Rocket.v(end, :))
 Rocket.v(end, :) = Rocket.applyKickangle(Mission)
+
+state0(1:3) = Rocket.r(end, :);
+state0(4:6) = Rocket.v(end, :);
+state0(7) = Rocket.m(end);
+
+options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelTol',1e-9,'AbsTol',1e-8);
+% [t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], options, state0);
+[t, state, te, ye, ie] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], state0, options);
+
+Rocket.r = [Rocket.r; state(:, 1:3)];
+Rocket.v = [Rocket.v; state(:, 4:6)];
+Rocket.vrel = Rocket.vrelCalc(Mission);
+Rocket.m = state(end, 7);
+Rocket.t = [Rocket.t; t];
 
 figure(1)
 

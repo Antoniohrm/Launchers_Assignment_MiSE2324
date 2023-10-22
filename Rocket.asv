@@ -72,9 +72,9 @@ classdef Rocket
                 end
 
                 inc = obj.cddata(it - 1, 1) - obj.cddata(it - 2, 1);
-                cont1 = obj.cddata(it - 2, 2) * (1 - (m - obj.cddata(it - 2, 1)) / inc);
-                cont2 = obj.cddata(it - 1, 2) * (1 - (obj.cddata(it - 1, 1) - m) / inc);
-                res = cont1 + cont2;
+                slope = (obj.cddata(it - 1, 2) - obj.cddata(it - 2, 2)) / (obj.cddata(it - 1, 1) - obj.cddata(it - 2, 1));
+                b = obj.cddata(it - 2, 2) - (slope * obj.cddata(it - 2, 1));
+                res = 
             end
         end
 
@@ -97,17 +97,16 @@ classdef Rocket
         end
 
         function res = vrelCalc(obj, Mission)
-            res = obj.v - cross(repmat([0, 0, Mission.werad], size(obj.r, 1), 1), obj.r, 2);
+            res = obj.v - cross(repmat([0, 0, Mission.we], size(obj.r, 1), 1), obj.r, 2);
         end
 
         function res = applyKickangle(obj, Mission)
             runit = obj.r(end, :) / norm(obj.r(end, :));
-            %e = cross([0, 0, Mission.werad], obj.r(end, :));
-            e = cross([0, 0, 1], runit);
+            e = cross([0, 0, Mission.we], obj.r(end, :));
             eunit = e / norm(e);
 
             vrelpitched = norm(obj.vrel(end, :)) * ((cosd(obj.kickangle) * runit) + (sind(obj.kickangle) * eunit));
-            res = vrelpitched + cross([0, 0, Mission.werad], obj.r(end, :));
+            res = vrelpitched + cross([0, 0, Mission.we], obj.r(end, :));
 
             norm(vrelpitched)
             norm(res)

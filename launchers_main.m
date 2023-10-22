@@ -11,7 +11,7 @@ Rocket.cexh = Rocket.cexhcalc(Mission);
 Rocket.m = Rocket.m0(Rocket.actstage);
 
 [Rocket, Mission] = Staging(Rocket, Mission);
-[t, state, te, ye, Rocket, Mission] = endoAtmPhase(Rocket, Mission);
+[Rocket, Mission] = endoAtmPhase(Rocket, Mission);
 % te is a column vector of the times at which events occurred
 % It give us the time when the event happened
 % ye contains the solution value at each of the event times in te
