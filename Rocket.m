@@ -34,7 +34,7 @@ classdef Rocket
         r = zeros(1, 3);        % m    (Position in ECI)
         v = zeros(1, 3);        % m/s  (Velocity in ECI)
         vrel = zeros(1, 3);     % m/s  (Relative velocity)
-        m = 0;                  % kg (Initialized to 0)
+        m = [];                  % kg (Initialized to 0)
         t = zeros(1,3);
         vdot = zeros(1, 3);     % m/s2 (Acceleration in ECI)
 

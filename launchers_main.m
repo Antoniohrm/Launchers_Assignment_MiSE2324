@@ -12,6 +12,23 @@ Rocket.m = Rocket.m0(Rocket.actstage);
 
 [Rocket, Mission] = Staging(Rocket, Mission);
 [Rocket, Mission] = endoAtmPhase(Rocket, Mission);
+
+figure(1)
+
+subplot(2, 2, 1)
+plot(Rocket.t, Rocket.vrel(:, 1));
+subplot(2, 2, 2)
+plot(Rocket.t, Rocket.vrel(:, 2));
+subplot(2, 2, 3)
+plot(Rocket.t, Rocket.vrel(:, 3));
+subplot(2, 2, 4)
+plot(Rocket.t, Rocket.h(Mission));
+
+figure(2)
+
+plot(Rocket.t, Rocket.m)
+
+
 % te is a column vector of the times at which events occurred
 % It give us the time when the event happened
 % ye contains the solution value at each of the event times in te

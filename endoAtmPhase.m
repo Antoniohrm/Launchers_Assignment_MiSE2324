@@ -6,11 +6,11 @@ state0(4:6) = Rocket.v(1, :);
 state0(7) = Rocket.m0(Rocket.actstage);
 
 
-inttime = Rocket.tstage;
-% options = [];
+% First integration, first stage until vertical rising
+
 options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelTol',1e-9,'AbsTol',1e-8);
 % [t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], options, state0);
-[t, state, te, ye, ie] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], state0, options);
+[t, state, te, ye, ie] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, Rocket.tstage(Rocket.actstage)], state0, options);
 % [ders] = endoAtmDer(0, state0, Rocket, Mission)
 % te is a column vector of the times at which events occurred
 % It give us the time when the event happened
@@ -22,7 +22,7 @@ options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelT
 Rocket.r = state(:, 1:3);
 Rocket.v = state(:, 4:6);
 Rocket.vrel = Rocket.vrelCalc(Mission);
-Rocket.m = state(end, 7);
+Rocket.m = state(:, 7);
 Rocket.t = t;
 % norm(Rocket.v(end, :))
 Rocket.v(end, :) = Rocket.applyKickangle(Mission)
@@ -33,52 +33,56 @@ state0(7) = Rocket.m(end);
 
 options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelTol',1e-9,'AbsTol',1e-8);
 % [t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], options, state0);
-[t, state, te, ye, ie] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], state0, options);
+[t, state, te, ye, ie] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, Rocket.tstage(Rocket.actstage)], state0, options);
 
 Rocket.r = [Rocket.r; state(:, 1:3)];
 Rocket.v = [Rocket.v; state(:, 4:6)];
 Rocket.vrel = Rocket.vrelCalc(Mission);
-Rocket.m = state(end, 7);
-Rocket.t = [Rocket.t; t];
+Rocket.m = [Rocket.m; state(:, 7)];
+Rocket.t = [Rocket.t; t + Rocket.t(end)];
 
-figure(1)
+% Third integration, second sage for t(second stage) fixed time, no events
 
-subplot(1, 3, 1)
-plot(t, vecnorm(transpose(Rocket.v)));
-subplot(1, 3, 2)
-plot(t, vecnorm(transpose(Rocket.vrel)));
-subplot(1, 3, 3)
-plot(t, Rocket.v)
+Rocket.actstage = Rocket.actstage + 1;
+
+state0(1:3) = Rocket.r(end, :);
+state0(4:6) = Rocket.v(end, :);
+state0(7) = Rocket.m0(Rocket.actstage);
+
+[t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, Rocket.tstage(Rocket.actstage)], state0);
+
+Rocket.r = [Rocket.r; state(:, 1:3)];
+Rocket.v = [Rocket.v; state(:, 4:6)];
+Rocket.vrel = Rocket.vrelCalc(Mission);
+Rocket.m = [Rocket.m; state(:, 7)];
+Rocket.t = [Rocket.t; t + Rocket.t(end)];
+
+% Separate second stage
+
+Rocket.actstage = Rocket.actstage + 1;
+Rocket.m(end) = Rocket.m0(Rocket.actstage);
+
+% figure(1)
+% 
+% subplot(1, 3, 1)
+% plot(Rocket.t, vecnorm(transpose(Rocket.v)));
+% subplot(1, 3, 2)
+% plot(Rocket.t, vecnorm(transpose(Rocket.vrel)));
+% subplot(1, 3, 3)
+% plot(Rocket.t, Rocket.v)
 % 
 % figure(2)
 % 
 % subplot(2, 2, 1)
-% plot(t, Rocket.v(:, 1));
+% plot(Rocket.t, Rocket.vrel(:, 1));
 % subplot(2, 2, 2)
-% plot(t, Rocket.v(:, 2));
+% plot(Rocket.t, Rocket.vrel(:, 2));
 % subplot(2, 2, 3)
-% plot(t, Rocket.v(:, 3));
+% plot(Rocket.t, Rocket.vrel(:, 3));
 % subplot(2, 2, 4)
-% plot(t, Rocket.h(Mission));
+% plot(Rocket.t, Rocket.h(Mission));
 
 
-% % Time arrival to VR
-% tvr = t(mediumpos);             % Time until end of VR
-% % vvr = vel(mediumpos);           % Velocity at the end of VR
-% vvr = norm(vrel(end,1:3))
-% 
-% % Instantaneus Kick Angle
-% kick = 1;               % deg
-% runit = state(end,1:3) / norm(state(end,1:3));
-% eunit = cross([0 0 Mission.we], runit) / norm(cross([0 0 Mission.we], runit));
-% vgtvec = vvr * ((cosd(kick) * runit) + (sind(kick) * eunit)); % Releative Velocity at the beginning of gravity turn
-% 
-% state(end,4:6) = vgtvec + cross([0, 0, Mission.we], state(end,1:3));
-% 
-% % Integration for Gravity Turn of 1st Stage
-% options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelTol',1e-9,'AbsTol',1e-8);
-% [t, state, te, ye, ie] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, inttime(Rocket.actstage)], state0, options);
-% 
 
 
 
