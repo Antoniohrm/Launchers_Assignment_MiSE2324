@@ -24,9 +24,6 @@ plot(Rocket.t, Rocket.vrel(:, 3));
 subplot(2, 2, 4)
 plot(Rocket.t, Rocket.h(Mission));
 
-figure(2)
-
-plot(Rocket.t, Rocket.m)
 
 
 % te is a column vector of the times at which events occurred

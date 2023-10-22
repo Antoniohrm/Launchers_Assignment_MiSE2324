@@ -7,7 +7,6 @@ classdef Mission
         mu = 3.886e14                   % m3/s2
         re = 6371e3                     % m
         we = (2 * pi) / (24 * 60 * 60); % deg/s    
-        %werad = 7.2921159e-5;           % rad/s
         latlaunch = 5.2                 % deg (North)
 
         % Constraints

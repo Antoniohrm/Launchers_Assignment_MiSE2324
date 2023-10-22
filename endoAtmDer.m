@@ -34,13 +34,11 @@ thrust = thrustval * thrustvec;
 % Drag is also directed along the velocity vector, but in the opposite
 % direction
 
-mach = norm(state(4:6)) / a;    % In a separate line to keep the code readable
-% drag = (0.5 * dens * (norm(state(4:6))^2) * Rocket.aerosurf * Rocket.cd(mach)) * ...
-    %(-1 * state(4:6) / norm(state(4:6)));
+mach = norm(state(4:6)) / a;
 
-dragval = (0.5 * dens * (norm(vrel)^2) * Rocket.aerosurf * Rocket.cd(mach));
+dragval = (-0.5 * dens * (norm(vrel)^2) * Rocket.aerosurf * Rocket.cd(mach));
 
-drag_vec = -(runit * ((norm(state(1:3)) - Mission.re) < Mission.vrlim)) + ...
+drag_vec = (runit * ((norm(state(1:3)) - Mission.re) < Mission.vrlim)) + ...
     (vrelunit * ((norm(state(1:3)) - Mission.re) >= Mission.vrlim));
 
 drag = dragval * drag_vec;
@@ -50,10 +48,6 @@ weight = -1 * state(7) * (Mission.mu / (norm(state(1:3))^3)) * state(1:3);
 
 ders(1:3) = state(4:6);
 ders(4:6) = (thrust + drag + weight) / state(7);
-%ders(4:6) = [1, 1, 1];
-
-%ders(4:6) = [0, 0, 0];
-
 ders(7) = -1 * Rocket.mdot(stage);
 
 ders = transpose(ders);

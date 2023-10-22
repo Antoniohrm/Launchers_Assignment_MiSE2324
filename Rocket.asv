@@ -27,14 +27,15 @@ classdef Rocket
                   6,    0.22;
                   6.5,  0.21
                 ];
-        kickangle = 1;                  % degrees
+        kickangle = 0.1.;                  % degrees
 
         % State
 
         r = zeros(1, 3);        % m    (Position in ECI)
         v = zeros(1, 3);        % m/s  (Velocity in ECI)
         vrel = zeros(1, 3);     % m/s  (Relative velocity)
-        m = 0;                  % kg (Initialized to 0)
+        m = [];                  % kg (Initialized to 0)
+        t = zeros(1,3);
         vdot = zeros(1, 3);     % m/s2 (Acceleration in ECI)
 
         actstage = 1;           % (Currently active stage)
@@ -71,10 +72,9 @@ classdef Rocket
                     it = it + 1;
                 end
 
-                inc = obj.cddata(it - 1, 1) - obj.cddata(it - 2, 1);
                 slope = (obj.cddata(it - 1, 2) - obj.cddata(it - 2, 2)) / (obj.cddata(it - 1, 1) - obj.cddata(it - 2, 1));
                 b = obj.cddata(it - 2, 2) - (slope * obj.cddata(it - 2, 1));
-                res = 
+                res = (slope * m) + b;
             end
         end
 
