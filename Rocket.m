@@ -97,16 +97,16 @@ classdef Rocket
         end
 
         function res = vrelCalc(obj, Mission)
-            res = obj.v - cross(repmat([0, 0, Mission.werad], size(obj.r, 1), 1), obj.r, 2);
+            res = obj.v - cross(repmat([0, 0, Mission.we], size(obj.r, 1), 1), obj.r, 2);
         end
 
         function res = applyKickangle(obj, Mission)
             runit = obj.r(end, :) / norm(obj.r(end, :));
-            e = cross([0, 0, Mission.werad], obj.r(end, :));
+            e = cross([0, 0, Mission.we], obj.r(end, :));
             eunit = e / norm(e);
 
             vrelpitched = norm(obj.vrel(end, :)) * ((cosd(obj.kickangle) * runit) + (sind(obj.kickangle) * eunit));
-            res = vrelpitched + cross([0, 0, Mission.werad], obj.r(end, :));
+            res = vrelpitched + cross([0, 0, Mission.we], obj.r(end, :));
 
             norm(vrelpitched)
             norm(res)

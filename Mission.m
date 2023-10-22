@@ -34,7 +34,7 @@ classdef Mission
             res = obj.orbitv + obj.excessdeltav;
         end
 
-        function res = werad(obj)
+        function res = werad2(obj)
             res = obj.we * (pi / 180);
         end
         
