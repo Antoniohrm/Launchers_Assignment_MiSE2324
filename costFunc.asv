@@ -1,0 +1,13 @@
+function [c, ceq] = costFunc(x, Rocket, Mission)
+
+propt = x(1) * 1e2
+pr = x(2:4);
+pv = x(5:7);
+
+agstate = [Rocket.r(end, :), Rocket.v(end, :), pr, pv];
+
+[t, state] = ode45(@exoAtmtDer, [0, propt], agstate);
+
+
+
+

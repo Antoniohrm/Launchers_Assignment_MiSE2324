@@ -27,7 +27,7 @@ classdef Rocket
                   6,    0.22;
                   6.5,  0.21
                 ];
-        kickangle = 1.9;                  % degrees
+        kickangle = 1;                  % degrees
 
         % State
 

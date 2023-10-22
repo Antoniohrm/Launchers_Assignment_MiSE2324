@@ -36,6 +36,10 @@ classdef Mission
         function res = werad2(obj)
             res = obj.we * (pi / 180);
         end
+
+        function res = rorbit(obj)
+            res = obj.horbit + obj.re;
+        end
         
     end
 end
