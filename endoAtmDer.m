@@ -52,6 +52,4 @@ ders(7) = -1 * Rocket.mdot(stage);
 
 ders = transpose(ders);
 
-
-
 end

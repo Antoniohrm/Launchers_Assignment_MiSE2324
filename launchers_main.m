@@ -24,6 +24,16 @@ plot(Rocket.t, Rocket.vrel(:, 3));
 subplot(2, 2, 4)
 plot(Rocket.t, Rocket.h(Mission));
 
+figure(2)
+
+subplot(1, 3, 1)
+plot(Rocket.t, vecnorm(transpose(Rocket.v)));
+subplot(1, 3, 2)
+plot(Rocket.t, vecnorm(transpose(Rocket.vrel)));
+subplot(1, 3, 3)
+plot(Rocket.t, Rocket.v)
+
+
 
 
 % te is a column vector of the times at which events occurred
