@@ -17,9 +17,9 @@ elseif Rocket.exoburncounter == 2
     rapf = stateOL(1) * (1 + stateOL(2));
     rpef = stateOL(1) * (1 - stateOL(2));
 
-    %ceq(1) = (rapf - Mission.rorbit) * 1e-7;
+    ceq(1) = (rapf - Mission.rorbit) * 1e-7;
     ceq(2) = (rpef - Mission.rorbit) * 1e-7;
-    ceq(1) = stateOL(2) * 1e-7;
+    %ceq(3) = stateOL(2) * 1e-10;
 end
 
 

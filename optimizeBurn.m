@@ -32,7 +32,7 @@ xub = xBound(:,2);
 
 nonlcon = @costFunc;
 
-options = optimoptions('fmincon','Display','iter', 'Algorithm', 'sqp','MaxFunctionEvaluations',10000);
+options = optimoptions('fmincon','Display','iter', 'Algorithm', 'sqp','MaxFunctionEvaluations',3000);
 Xsc = fmincon(@fSolveFun,opt0Sc',[],[],[],[],[xlb],[xub],@(x) nonlcon(x, Rocket, Mission), options);
 
 end
