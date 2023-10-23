@@ -62,7 +62,9 @@ function [Rocket, Mission] = Staging(Rocket, Mission)
     equ = Rocket.strcoeff(3) == ms3 / (ms3 + Rocket.mprop(3));
     Rocket.mstr(3) = double(solve(equ,ms3));
     
-    Rocket.th = (Rocket.m0 - Rocket.mprop) .* Mission.maxg * Mission.g;
+    Rocket.th(1) = (Rocket.m0(1) - Rocket.mprop(1)) * Mission.maxg(1) * Mission.g - (Rocket.nozzlepress(1) * Rocket.nozzlesurf(1));
+    Rocket.th(2) = (Rocket.m0(2) - Rocket.mprop(2)) * Mission.maxg(2) * Mission.g - (Rocket.nozzlepress(2) * Rocket.nozzlesurf(2));
+    Rocket.th(3) = (Rocket.m0(3) - Rocket.mprop(3)) * Mission.maxg(3) * Mission.g;
     Rocket.mdot = Rocket.th ./ Rocket.cexh;
     Rocket.tstage = Rocket.mprop ./ Rocket.mdot;
 

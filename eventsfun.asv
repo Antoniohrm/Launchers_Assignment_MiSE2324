@@ -12,10 +12,10 @@ elseif Rocket.actstage == 1
     stops(2) = 1;
     direction(2) = -1;
 elseif Rocket.actstage == 3
-    %check(3) = norm(state(1:3)) - (Mission.rorbit - 1000);
-    check(3) = dot(state(1:3), state(4:6));
+    %check(3) = norm(state(1:3)) - (Mission.rorbit - 100);
+    check(3) = dot(state(1:))
     stops(3) = 1;
-    direction(3) = -1;
+    direction(3) = 1;
 end
 
 end

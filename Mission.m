@@ -40,6 +40,10 @@ classdef Mission
         function res = rorbit(obj)
             res = obj.horbit + obj.re;
         end
+
+        function res = torbit(obj)
+            res = 2 * pi * sqrt(((obj.re + obj.horbit) ^3 ) / obj.mu);
+        end
         
     end
 end

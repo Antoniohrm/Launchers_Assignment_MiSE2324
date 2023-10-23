@@ -27,7 +27,8 @@ classdef Rocket
                   6,    0.22;
                   6.5,  0.21
                 ];
-        kickangle = 3;                  % degrees
+        kickangle = 1.275;                  % degrees
+        exoburncounter = 1;
 
         % State
 
@@ -107,11 +108,6 @@ classdef Rocket
 
             vrelpitched = norm(obj.vrel(end, :)) * ((cosd(obj.kickangle) * runit) + (sind(obj.kickangle) * eunit));
             res = vrelpitched + cross([0, 0, Mission.we], obj.r(end, :));
-
-            norm(vrelpitched)
-            norm(res)
-            norm(obj.v(size(obj.v, 1) - 1, :))
-            norm(obj.v(size(obj.v, 1) - 2, :))
         end
 
 %         function res = dypressure(obj, dp)

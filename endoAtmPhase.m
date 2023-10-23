@@ -23,7 +23,7 @@ Rocket.v = state(:, 4:6);
 Rocket.vrel = Rocket.vrelCalc(Mission);
 Rocket.m = state(:, 7);
 Rocket.t = t;
-Rocket.v(end, :) = Rocket.applyKickangle(Mission)
+Rocket.v(end, :) = Rocket.applyKickangle(Mission);
 
 state0(1:3) = Rocket.r(end, :);
 state0(4:6) = Rocket.v(end, :);
