@@ -13,21 +13,17 @@ Rocket.cexh = Rocket.cexhcalc(Mission);             % Initialize velocities
 Rocket.m(1) = Rocket.m0(Rocket.actstage);           % Initialize mass
 
 
+Rocket.kickangle = 1.4;
+
 [Rocket, Mission] = Staging(Rocket, Mission);
 [Rocket, Mission] = endoAtmPhase(Rocket, Mission);
 [Rocket, Mission] = exoAtmPhase(Rocket, Mission);
-
-% Propagate ballistic flight to visualize resulting orbit
-
 optionsfree = odeset('RelTol',1e-10);
-[t, state] = ode45(@(t, state) ballisticDer (t, state, Rocket, Mission), [0, 4 * Mission.torbit], [Rocket.r(end, :), Rocket.v(end, :)], optionsfree);
+[t, state] = ode45(@(t, state) ballisticDer (t, state, Rocket, Mission), [0, 0.75 * Mission.torbit], [Rocket.r(end, :), Rocket.v(end, :)], optionsfree);
 [Rocket, Mission] = updateRocket(t, state, Rocket, Mission);
-
-% Print extra fuel after circularizing
+max(Rocket.h(Mission))
 
 extrapropfuel = Rocket.m(end) - (Rocket.m0(3) - Rocket.mprop(3))
-
-% Calculate altitude profiles and plot results
-
 Rocket.hf = Rocket.h(Mission) * 1e-3;
+
 plotResults(Rocket, Mission);
