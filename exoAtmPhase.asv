@@ -26,10 +26,11 @@ Rocket.exoburncounter = Rocket.exoburncounter + 1;
 % negative (direction = -1)
 
 options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'AbsTol',1e-9,'RelTol',1e-8);
-[t , state] = ode45(@(t,state) ballisticDer(t, state, Rocket, Mission),[0, 4 * Mission.torbit], [Rocket.r(end, :), Rocket.v(end, :)], options);
+[t , state] = ode45(@(t,state) ballisticDer(t, state, Rocket, Mission),[0, 0.4 * Mission.torbit], [Rocket.r(end, :), Rocket.v(end, :)], options);
+[t , state] = ode45(@(t,state) ballisticDer(t, state, Rocket, Mission),[0, 0.4 * Mission.torbit], [Rocket.r(end, :), Rocket.v(end, :)], options);
 
-[Rocket, Mission] = updateRocket(t, state, Rocket, Mission);
-Rocket.m = [Rocket.m; ones(size(t)) * Rocket.m(end)];
+
+
 
 
 

@@ -18,9 +18,9 @@ Rocket.kickangle = 1.4;
 [Rocket, Mission] = Staging(Rocket, Mission);
 [Rocket, Mission] = endoAtmPhase(Rocket, Mission);
 [Rocket, Mission] = exoAtmPhase(Rocket, Mission);
-optionsfree = odeset('RelTol',1e-10);
-[t, state] = ode45(@(t, state) ballisticDer (t, state, Rocket, Mission), [0, 4 * Mission.torbit], [Rocket.r(end, :), Rocket.v(end, :)], optionsfree);
-[Rocket, Mission] = updateRocket(t, state, Rocket, Mission);
+% optionsfree = odeset('RelTol',1e-10);
+% [t, state] = ode45(@(t, state) ballisticDer (t, state, Rocket, Mission), [0, 0.75 * Mission.torbit], [Rocket.r(end, :), Rocket.v(end, :)], optionsfree);
+% [Rocket, Mission] = updateRocket(t, state, Rocket, Mission);
 max(Rocket.h(Mission))
 
 

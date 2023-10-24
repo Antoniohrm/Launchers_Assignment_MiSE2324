@@ -15,18 +15,6 @@ rpef = stateOL(1) * (1 - stateOL(2));
 
 ceq(1) = (rapf - Mission.rorbit) * 1e-6;
 ceq(2) = (rpef - Mission.rorbit) * 1e-6;
-% 
-% if Rocket.exoburncounter == 1
-%     rapf = stateOL(1) * (1 + stateOL(2));
-%     ceq = abs(rapf - Mission.rorbit) * 1e-7;
-% elseif Rocket.exoburncounter == 2
-%     rapf = stateOL(1) * (1 + stateOL(2));
-%     rpef = stateOL(1) * (1 - stateOL(2));
-% 
-%     ceq(1) = abs(rapf - Mission.rorbit) * 1e-7;
-%     ceq(2) = abs(rpef - 150e3) * 1e-7;
-%     % ceq(3) = stateOL(2) * 1e-10;
-% end
 
 c = [];
 

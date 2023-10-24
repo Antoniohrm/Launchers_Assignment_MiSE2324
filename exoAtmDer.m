@@ -6,7 +6,6 @@ r = state(1:3);
 v = state(4:6);
 pr = state(7:9);
 pv = state(10:12);
-% m = state(13);
 m = Rocket.m0(Rocket.actstage) - (t * Rocket.mdot(Rocket.actstage));
 
 % Components of the velocity derivative
@@ -24,7 +23,6 @@ ders(1:3) = v;
 ders(4:6) = weight + (thracc * vdot3);
 ders(7:9) = prdot1 * prdot2;
 ders(10:12) = -1 * pr;
-% ders(13) = -1 * Rocket.mdot(Rocket.actstage);
 
 ders = transpose(ders);
 
