@@ -68,4 +68,6 @@ function [Rocket, Mission] = Staging(Rocket, Mission)
     Rocket.mdot = Rocket.th ./ Rocket.cexh;
     Rocket.tstage = Rocket.mprop ./ Rocket.mdot;
 
+    Rocket.m(1) = Rocket.m0(Rocket.actstage);
+
 end

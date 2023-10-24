@@ -4,7 +4,7 @@ classdef Mission
         % Initialize constants
 
         g = 9.81                        % m/s2
-        mu = 3.886e14                   % m3/s2
+        mu = 3.986e14                   % m3/s2
         re = 6371e3                     % m
         we = (2 * pi) / (24 * 60 * 60); % deg/s    
         latlaunch = 5.2                 % deg (North)

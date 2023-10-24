@@ -27,7 +27,7 @@ classdef Rocket
                   6,    0.22;
                   6.5,  0.21
                 ];
-        kickangle = 1.275;                  % degrees
+        kickangle = 0.85;                  % degrees
         exoburncounter = 1;
 
         % State
@@ -35,11 +35,11 @@ classdef Rocket
         r = zeros(1, 3);        % m    (Position in ECI)
         v = zeros(1, 3);        % m/s  (Velocity in ECI)
         vrel = zeros(1, 3);     % m/s  (Relative velocity)
-        m = [];                  % kg (Initialized to 0)
-        t = zeros(1,3);
+        m = [];                 % kg (Initialized to 0)
+        t = [0];
         vdot = zeros(1, 3);     % m/s2 (Acceleration in ECI)
 
-        actstage = 1;           % (Currently active stage)
+        actstage = 1;           % (Current active stage)
 
         
         % Calculated parameters, initialized to 0

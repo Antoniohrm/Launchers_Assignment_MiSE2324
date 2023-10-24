@@ -15,7 +15,7 @@ opt0Sc = [propt * 1e-2, prU, pvU];
 state0 = [Rocket.r(end, :), Rocket.v(end, :)];
 
 %Time optimization bounds
-xBound(1, 1:2) = [60 propt]*1e-2; % normalized
+xBound(1, 1:2) = [1 propt]*1e-2; % normalized
 % Thrust angular velocity (pru) optimization bounds
 xBound(2, 1:2) = [-1 1]*30*pi/180; % Thrust angular velocity pr is limited at 30 deg/s
 xBound(3, 1:2) = [-1 1]*30*pi/180;
