@@ -58,11 +58,13 @@ classdef Rocket
 
         % Events parameters
 
-        tvr = 0;                % (index of time at the end of the vertical rising)
-        toptburn = 0;           % (index of the end of the first exoAtm burn)
-        tcirc1 = 0;             % (index of time of the first circularization burn)
-        tcirc2 = 0;             % (index of time of the second circularization burn)
-        tstburn = zeros(1, 3);  % (index of time of burnout for each stage)
+        tvr = 0;                % s (Time at the end of the vertical rising)
+        toptburn = 0;           % s (Time at the end of the first exoAtm burn)
+        tcirc1 = 0;             % s (Time of the first circularization burn)
+        tcirc2 = 0;             % s (Time of the second circularization burn)
+        tstburn = zeros(1, 3);  % s (Time of burnout for each stage)
+
+    
         
         
     end

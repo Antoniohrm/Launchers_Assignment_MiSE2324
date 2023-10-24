@@ -6,6 +6,7 @@ options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelT
 [t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, Rocket.tstage(Rocket.actstage)], [Rocket.r(end, :), Rocket.v(end, :), Rocket.m(end)], options);
 
 [Rocket, Mission] = updateRocket(t, state, Rocket, Mission);
+Rocket.tvr = length(Rocket.t);
 
 % Apply kick angle
 
@@ -17,6 +18,7 @@ options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelT
 [t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, Rocket.tstage(Rocket.actstage)], [Rocket.r(end, :), Rocket.v(end, :), Rocket.m(end)], options);
 
 [Rocket, Mission] = updateRocket(t, state, Rocket, Mission);
+Rocket.tstburn(Rocket.actstage) = length(Rocket.t);
 
 % Propagate second stage until it runs out of fuel
 
@@ -27,6 +29,7 @@ options = odeset('Events',@(t, state) eventsfun(t, state, Rocket, Mission),'RelT
 [t, state] = ode45(@(t, state) endoAtmDer(t, state, Rocket, Mission), [0, Rocket.tstage(Rocket.actstage)], [Rocket.r(end, :), Rocket.v(end, :), Rocket.m(end)], options);
 
 [Rocket, Mission] = updateRocket(t, state, Rocket, Mission);
+Rocket.tstburn(Rocket.actstage) = length(Rocket.t);
 
 % Separate second stage
 
