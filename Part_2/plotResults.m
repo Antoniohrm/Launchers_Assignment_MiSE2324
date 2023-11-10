@@ -226,32 +226,7 @@ fontsize(gca, 12, 'points')
 
 figure(11)
 
-% Full mass profile
-
-figure(10)
-
-index = 1:Rocket.tvr;
-plot(Rocket.t(index), Rocket.m(index), 'LineWidth', 3);
-hold on
-index = Rocket.tvr:Rocket.tstburn(1);
-plot(Rocket.t(index), Rocket.m(index), 'r', 'LineWidth', 3);
-hold on
-index = Rocket.tstburn(1):Rocket.tstburn(2);
-
-% Plot reference no-mass line
-
-hold on
-emptypropmass = Rocket.m0(3) - Rocket.mprop(3);
-plot([Rocket.t(1), Rocket.t(Rocket.tcirc2)], [emptypropmass, emptypropmass], 'k', 'LineStyle', '-.', 'LineWidth', 2)
-
-xlabel('Time since liftoff (s)', 'FontSize', 14)
-ylabel('Mass (kg)', 'FontSize', 14)
-title('Evolution of mass over time, from liftoff to second stage burnout', 'FontSize', 16)
-legend('Vertical rising', 'First stage gravity turn', 'Second stage gravity turn', ...
-     'Mass of the out-of-fuel rocket', 'FontSize', 12)
-fontsize(gca, 12, 'points')
-
-figure(12)
+% Endoatmospheric mass profile
 
 index = 1:Rocket.tvr;
 plot(Rocket.t(index), Rocket.m(index), 'LineWidth', 3);
@@ -261,7 +236,24 @@ plot(Rocket.t(index), Rocket.m(index), 'r', 'LineWidth', 3);
 hold on
 index = Rocket.tstburn(1):Rocket.tstburn(2);
 plot(Rocket.t(index), Rocket.m(index), 'g', 'LineWidth', 3);
+
+% Plot reference no-mass line
+
 hold on
+emptypropmass = Rocket.m0(3) - Rocket.mprop(3);
+plot([Rocket.t(1), Rocket.t(Rocket.tstburn(2))], [emptypropmass, emptypropmass], 'k', 'LineStyle', '-.', 'LineWidth', 2)
+
+xlabel('Time since liftoff (s)', 'FontSize', 14)
+ylabel('Mass (kg)', 'FontSize', 14)
+title('Evolution of mass over time, from liftoff to second stage burnout', 'FontSize', 16)
+legend('Vertical rising', 'First stage gravity turn', 'Second stage gravity turn', ...
+     'Mass of the out-of-fuel rocket', 'FontSize', 12)
+fontsize(gca, 12, 'points')
+
+% Exoatmospheric mass profile
+
+figure(12)
+
 index = Rocket.tstburn(2):Rocket.toptburn;
 plot(Rocket.t(index), Rocket.m(index), 'y', 'LineWidth', 3);
 hold on
@@ -275,12 +267,19 @@ plot(Rocket.t(index), Rocket.m(index), 'm', 'LineWidth', 3);
 
 hold on
 emptypropmass = Rocket.m0(3) - Rocket.mprop(3);
-plot([Rocket.t(1), Rocket.t(Rocket.tcirc2)], [emptypropmass, emptypropmass], 'k', 'LineStyle', '-.', 'LineWidth', 2)
+plot([Rocket.t(Rocket.tstburn(2)), Rocket.t(Rocket.tcirc2)], [emptypropmass, emptypropmass], 'k', 'LineStyle', '-.', 'LineWidth', 2)
 
 xlabel('Time since liftoff (s)', 'FontSize', 14)
 ylabel('Mass (kg)', 'FontSize', 14)
-title('Evolution of mass over time, from liftoff to second circularization burn', 'FontSize', 16)
-legend('Vertical rising', 'First stage gravity turn', 'Second stage gravity turn', ...
-    'Optimized exoatmospheric burn', 'Ballistic flight before circularizing', ...
+title('Evolution of mass over time, from second stage burnout to second circularization burn', 'FontSize', 16)
+legend('Optimized exoatmospheric burn', 'Ballistic flight before circularizing', ...
     'Ballistic flight after first circularization', 'Mass of the out-of-fuel rocket', 'FontSize', 12)
 fontsize(gca, 12, 'points')
+
+
+
+
+
+
+
+

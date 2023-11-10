@@ -27,7 +27,7 @@ classdef Rocket
                   6,    0.22;
                   6.5,  0.21
                 ];
-        kickangle = 0.85;                  % degrees
+        kickangle = 1.4;                  % degrees
         exoburncounter = 1;
 
         % State
@@ -49,7 +49,7 @@ classdef Rocket
         cexh = zeros(1, 3);     % m/s (Exhaust velocity)
         mratio = zeros(1, 3);   % (Mass ratio per stage)
         plratio = zeros(1, 3);  % (Payload ratio per stage)
-        m0 = zeros(1, 3);       % kg (Subrocket mass per stage
+        m0 = zeros(1, 3);       % kg (Subrocket mass per stage)
         mstr = zeros(1, 3);     % kg
         mprop = zeros(1, 3);    % kg
         th = zeros(1, 3);       % N
@@ -58,13 +58,11 @@ classdef Rocket
 
         % Events parameters
 
-        tvr = 0;                % s (Time at the end of the vertical rising)
-        toptburn = 0;           % s (Time at the end of the first exoAtm burn)
-        tcirc1 = 0;             % s (Time of the first circularization burn)
-        tcirc2 = 0;             % s (Time of the second circularization burn)
-        tstburn = zeros(1, 3);  % s (Time of burnout for each stage)
-
-    
+        tvr = 0;                % (index of time at the end of the vertical rising)
+        toptburn = 0;           % (index of the end of the first exoAtm burn)
+        tcirc1 = 0;             % (index of time of the first circularization burn)
+        tcirc2 = 0;             % (index of time of the second circularization burn)
+        tstburn = zeros(1, 3);  % (index of time of burnout for each stage)
         
         
     end
@@ -121,10 +119,6 @@ classdef Rocket
             vrelpitched = norm(obj.vrel(end, :)) * ((cosd(obj.kickangle) * runit) + (sind(obj.kickangle) * eunit));
             res = vrelpitched + cross([0, 0, Mission.we], obj.r(end, :));
         end
-
-%         function res = dypressure(obj, dp)
-%             res = 0.5 * dens * vrel^2
-%         end
 
     end
 
